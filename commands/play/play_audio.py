@@ -21,11 +21,17 @@ async def play_audio(ctx, queue, played_songs, bot, loop_flags, file_path):
     await ctx.send(f'Now playing: {os.path.basename(file_path)}')
 
 async def next_audio(ctx, queue, played_songs, bot, loop_flags):
-    if loop_flags["is_looping"] and not loop_flags["stopped"]:
-        if loop_flags["loop_type"] == "song" and played_songs:
-            file_path = played_songs[-1]
-            queue.insert(0, file_path)
-        elif loop_flags["loop_type"] == "queue":
-            queue.extend(played_songs)
     if queue and not loop_flags["stopped"]:
-        await play_audio(ctx, queue, played_songs, bot, loop_flags, queue.pop(0))
+        if loop_flags.get("skipped"):
+            loop_flags["skipped"] = False
+            if queue:
+                skipped_song = queue.pop(0)
+                if loop_flags["is_looping"] and loop_flags["loop_type"] == "queue":
+                    played_songs.append(skipped_song)
+
+        if loop_flags["is_looping"] and not loop_flags["stopped"]:
+            if loop_flags["loop_type"] == "queue" and played_songs:
+                queue.extend(song for song in played_songs if song not in queue)
+
+        if queue and not loop_flags["stopped"]:
+            await play_audio(ctx, queue, played_songs, bot, loop_flags, queue.pop(0))

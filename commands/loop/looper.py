@@ -1,4 +1,4 @@
-def loop(bot, queue, played_songs, loop_flags):
+def looper(bot, queue, played_songs, loop_flags):
     @bot.command()
     async def loop(ctx):
         if not played_songs:
