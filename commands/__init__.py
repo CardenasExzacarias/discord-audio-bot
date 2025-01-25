@@ -8,17 +8,17 @@ from .leave import leave
 from .replay import replay
 from .commands import _commands
 from .loop import loop
+from .print import print
 
-def register_commands(bot, queue, played_songs, media_dir):
-    loop_flags = { "is_looping": False, "loop_type": None, "stopped": False, "skipped": False }
-
+def register_commands(bot, player_queue, media_dir):
     join(bot)
-    play(bot, queue, played_songs, media_dir, loop_flags)
+    play(bot, player_queue, media_dir)
     pause(bot)
     resume(bot)
-    stop(bot, loop_flags)
-    skip(bot, loop_flags)
+    replay(bot, player_queue)
+    loop(bot, player_queue)
+    skip(bot)
+    stop(bot)
     leave(bot)
-    replay(bot, queue, played_songs)
+    print(bot, player_queue)
     _commands(bot)
-    loop(bot, queue, played_songs, loop_flags)

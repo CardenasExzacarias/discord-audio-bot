@@ -9,11 +9,10 @@ def _commands(bot):
         - **!resume**: Resume the paused audio or video.
         - **!stop**: Stop the currently playing audio or video.
         - **!skip**: Skip to the next song or video in the queue.
-        - **!replay**: Replay the last song or video played.
+        - **!replay**: Start/Stop replaying the actual audio or video.
         - **!leave**: Disconnect the bot from the voice channel.
-        - **!loop**: Loop the last played song or video.
-        - **!loop_queue**: Loop the entire queue of played songs or videos.
-        - **!stop_loop**: Stop looping.
+        - **!loop**: Start/Stop looping the actual queue.
+        - **!print**: Print the queue.
         - **!commands**: List all commands with a brief description.
         """
         await ctx.send(help_text)

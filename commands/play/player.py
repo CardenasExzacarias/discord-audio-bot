@@ -2,7 +2,7 @@ import os
 from .play_audio import play_audio
 from .play_video import play_video
 
-def player(bot, queue, played_songs, media_dir, loop_flags):
+def player(bot, player_queue, media_dir):
     @bot.command()
     async def play(ctx, *, query):
         voice_client = ctx.voice_client
@@ -16,10 +16,11 @@ def player(bot, queue, played_songs, media_dir, loop_flags):
             return
 
         file_path = os.path.join(media_dir, matches[0])
-        queue.append(file_path)
+        player_queue.enqueue(file_path)
+        await ctx.send(f'"{os.path.basename(player_queue.tail.path)}" Has been enqueued.')
 
         if not voice_client.is_playing():
             if file_path.endswith(('.mp3', '.wav')):
-                await play_audio(ctx, queue, played_songs, bot, loop_flags, file_path)
+                await play_audio(ctx, player_queue, bot)
             elif file_path.endswith(('.mp4', '.mkv', '.avi')):
-                await play_video(ctx, queue, played_songs, bot, loop_flags, file_path)
+                await play_video(ctx, player_queue, bot)

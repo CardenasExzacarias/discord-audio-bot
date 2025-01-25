@@ -1,11 +1,10 @@
-def replay(bot, queue, played_songs):
+import os
+
+def replay(bot, player_queue):
     @bot.command()
     async def replay(ctx):
-        if played_songs:
-            file_path = played_songs[-1]
-            queue.insert(0, file_path)
-            await ctx.send('Replaying the last song.')
-            if not ctx.voice_client.is_playing():
-                await play_next(ctx, queue, played_songs)
+        player_queue.replay()
+        if player_queue.is_replaying:
+            await ctx.send(f'Start replaying: "{os.path.basename(player_queue.head.path)}"')
         else:
-            await ctx.send('No songs have been played yet.')
+            await ctx.send(f'Stop replaying: "{os.path.basename(player_queue.head.path)}"')
